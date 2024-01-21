@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Hosting;
 using MonkeyIsland;
 using NLog;
 using NLog.Web;

@@ -1,13 +1,22 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using MonkeyIsland.StartupConfiguration;
+﻿using MonkeyIsland.StartupConfiguration;
 
 namespace MonkeyIsland;
+/// <summary>
+/// Application startup code
+/// </summary>
+/// <param name="configuration">App configuration</param>
 
 public class Startup(IConfiguration configuration)
 {
+    /// <summary>
+    /// App configuration
+    /// </summary>
     public IConfiguration Configuration { get; } = configuration;
 
+    /// <summary>
+    /// Configure service
+    /// </summary>
+    /// <param name="services">service collection</param>
     public void ConfigureServices(IServiceCollection services)
     {
         services.AddControllers();
@@ -22,6 +31,11 @@ public class Startup(IConfiguration configuration)
 
     }
 
+    /// <summary>
+    /// Configure app
+    /// </summary>
+    /// <param name="appBuilder">app builder</param>
+    /// <param name="environment">web host environment</param>
     public void Configure(IApplicationBuilder appBuilder, IWebHostEnvironment environment)
     {
         if (environment.IsDevelopment())
