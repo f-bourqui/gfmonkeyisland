@@ -11,12 +11,23 @@ namespace MonkeyIsland.Core
 
         public async Task DoYourMagic()
         {
-            var magicNumbers = await _apiHttpClient.GetMagicNumbersAsync();
-            if (magicNumbers is { })
+            try
             {
-                var sum = magicNumbers.magicNumbers.Sum();
-                _logger.LogInformation("The magic numbers are {magic_numbers} and the sum is {magic_sum}", magicNumbers.magicNumbers.Any() ? magicNumbers.magicNumbers.Select(x => $"{x}").Aggregate((x, y) => $"{x},{y}") : "Empty", sum);
-                await _apiHttpClient.SendResult(sum);
+                var magicNumbers = await _apiHttpClient.GetMagicNumbersAsync();
+                if (magicNumbers is { })
+                {
+                    var sum = magicNumbers.magicNumbers.Sum();
+                    _logger.LogInformation("The magic numbers are {magic_numbers} and the sum is {magic_sum}",
+                        magicNumbers.magicNumbers.Any() ?
+                        magicNumbers.magicNumbers.Select(x => $"{x}").Aggregate((x, y) => $"{x},{y}")
+                        : "Empty", sum);
+
+                    await _apiHttpClient.SendResult(sum);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error while doing the magic");
             }
         }
     }

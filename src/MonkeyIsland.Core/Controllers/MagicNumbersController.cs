@@ -11,15 +11,9 @@ public class MagicNumbersController(ILogger<MagicNumbersController>? logger) : C
     private readonly ILogger<MagicNumbersController> _logger = logger ?? NullLogger<MagicNumbersController>.Instance;
 
     [HttpGet()]
-    public async Task<IActionResult> Ping()
+    public IActionResult Ping()
     {
         return Ok("Pong");
-    }
-
-    [HttpPost()]
-    public void MagicNumbersCallback(string key)
-    {
-        _logger.LogInformation("Received key is : {key} ", key);
     }
 
     [HttpPost("callback")]
@@ -30,7 +24,7 @@ public class MagicNumbersController(ILogger<MagicNumbersController>? logger) : C
             using (var reader = new StreamReader(Request.Body))
             {
                 string rawContent = await reader.ReadToEndAsync();
-                _logger.LogInformation($"Raw Callback Data: {rawContent}");
+                _logger.LogInformation("Raw Callback Data: {raw_callback_data}", rawContent);
             }
 
             return Ok("Callback handled successfully");
