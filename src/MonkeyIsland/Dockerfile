@@ -1,26 +1,23 @@
 #See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+USER app
 WORKDIR /app
 EXPOSE 8080
-EXPOSE 8081
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["src/MonkeyIsland.Core/*.csproj", "MonkeyIsland.Core/"]
-COPY ["src/MonkeyIsland/*.csproj", "MonkeyIsland/"]
-
-RUN dotnet restore "MonkeyIsland/MonkeyIsland.csproj"
-COPY ./src .
-
-WORKDIR "/src/MonkeyIsland.Core"
-RUN dotnet build "MonkeyIsland.Core.csproj" -c Release -o /app/build
-
+COPY ["MonkeyIsland/MonkeyIsland.csproj", "MonkeyIsland/"]
+COPY ["MonkeyIsland.Core/MonkeyIsland.Core.csproj", "MonkeyIsland.Core/"]
+RUN dotnet restore "./MonkeyIsland/./MonkeyIsland.csproj"
+COPY . .
 WORKDIR "/src/MonkeyIsland"
-RUN dotnet build "MonkeyIsland.csproj" -c Release -o /app/build
+RUN dotnet build "./MonkeyIsland.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "MonkeyIsland.csproj" -c Release -o /app/publish /p:UseAppHost=false
+ARG BUILD_CONFIGURATION=Release
+RUN dotnet publish "./MonkeyIsland.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
