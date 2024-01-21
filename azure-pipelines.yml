@@ -23,7 +23,7 @@ stages:
 - stage: BuildAndTest
   displayName: Build and Test
   jobs:
-  - job: Build and Test
+  - job: BuildAndTest
     displayName: Build and Test
     pool:
       vmImage: $(vmImageName)
@@ -43,7 +43,7 @@ stages:
 - stage: DockerBuildAndPush
   displayName: Docker Build and Push
   jobs:
-  - job: Build and Push Docker image
+  - job: DockerBuildAndPush
     displayName: Build and Push Docker image on docker to container registry
     pool:
       vmImage: $(vmImageName)
