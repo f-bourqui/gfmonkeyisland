@@ -20,16 +20,36 @@ variables:
   vmImageName: 'ubuntu-latest'
 
 stages:
-- stage: Build
-  displayName: Build and push stage
+- stage: BuildAndTest
+  displayName: Build and Test
   jobs:
-  - job: Build
-    displayName: Build
+  - job: Build and Test
+    displayName: Build and Test
     pool:
       vmImage: $(vmImageName)
     steps:
+    - script: dotnet restore
+      displayName: 'Restore Dependencies'
+
+    - script: dotnet build --configuration Debug
+      displayName: 'Build'
+
+    - task: VSTest@2
+      displayName: 'Run Unit Tests'
+      inputs:
+        platform: '$(buildPlatform)'
+        configuration: '$(buildConfiguration)'
+
+- stage: DockerBuildAndPush
+  displayName: Docker Build and Push
+  jobs:
+  - job: Build and Push Docker image
+    displayName: Build and Push Docker image on docker to container registry
+    pool:
+      vmImage: $(vmImageName)
+    steps:      
     - task: Docker@2
-      displayName: Build and push an image to container registry
+      displayName: Build and push a docker image to container registry
       inputs:
         command: buildAndPush
         repository: $(imageRepository)
