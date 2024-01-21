@@ -13,7 +13,7 @@ variables:
   dockerRegistryServiceConnection: '1f52ea0b-f148-44c9-ac5d-bfc634e8ea4a'
   imageRepository: 'fbourquigfmonkeyisland'
   containerRegistry: 'gfmonkeyisland.azurecr.io'
-  dockerfilePath: '$(Build.SourcesDirectory)/sources/MonkeyIsland/Dockerfile'
+  dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
   tag: '$(Build.BuildId)'
 
   # Agent VM image name

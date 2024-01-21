@@ -7,7 +7,6 @@ EXPOSE 8081
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
-COPY ["MonkeyIsland/MonkeyIsland.csproj", "MonkeyIsland/"]
 RUN dotnet restore "MonkeyIsland/MonkeyIsland.csproj"
 COPY . .
 WORKDIR "/src/MonkeyIsland"
