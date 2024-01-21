@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonkeyIsland", "MonkeyIslan
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonkeyIsland.Core", "MonkeyIsland.Core\MonkeyIsland.Core.csproj", "{F5741722-E396-47D5-A267-FD5A9EFC3F84}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonkeyIsland.Test.Unit", "MonkeyIsland.Test.Unit\MonkeyIsland.Test.Unit.csproj", "{AFAA1F32-0290-41E1-B230-C4BAD22388EF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonkeyIsland.Test.Unit", "MonkeyIsland.Tests.Unit\MonkeyIsland.Tests.Unit.csproj", "{AFAA1F32-0290-41E1-B230-C4BAD22388EF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
