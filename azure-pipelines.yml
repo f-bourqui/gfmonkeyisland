@@ -16,6 +16,7 @@ variables:
   dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
   sourceFilepath: '$(Build.SourcesDirectory)/src'
   tag: '$(Build.BuildId)'
+  buildConfiguration: 'Release'
 
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
@@ -27,22 +28,36 @@ stages:
   - job: BuildAndTest
     displayName: Build and Test
     pool:
-      vmImage: 'windows-latest'
-    steps:
-    - script: dotnet restore
-      displayName: 'Restore Dependencies'
-      workingDirectory: '$(sourceFilepath)'
-
-    - script: dotnet build --configuration Debug
-      displayName: 'Build'
-      workingDirectory: '$(sourceFilepath)'
-
-    - task: VSTest@2
-      displayName: 'Run Unit Tests'
+      vmImage: $(vmImageName)
+    steps:     
+      # Restore
+    - task: DotNetCoreCLI@2
+      displayName: Restore
       inputs:
-        platform: '$(buildPlatform)'
-        configuration: '$(buildConfiguration)'
-        searchFolder: '$(sourceFilepath)'
+        command: restore
+        projects:  $(sourceFilepath)/*.sln
+    ## Build all csproj    
+    - task: DotNetCoreCLI@2
+      displayName: Build
+      inputs:
+        command: build
+        arguments: --configuration $(buildConfiguration) --no-restore
+        projects: $(sourceFilepath)/*.sln
+    # Collect code coverage metrics with Coverlet
+    # All Unit Tests csproj 
+    - task: DotNetCoreCLI@2
+      displayName: 'dotnet test'
+      inputs:
+        command: test
+        arguments: '--no-build --configuration $(buildConfiguration) --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura'
+        publishTestResults: true
+        projects:  $(sourceFilepath)/**/*.Tests.Unit.csproj
+    # Publish all unit tests results and code coveradge
+    - task: PublishCodeCoverageResults@1
+      displayName: 'Publish code coverage report'
+      inputs:
+        codeCoverageTool: 'Cobertura'
+        summaryFileLocation: '$(Agent.TempDirectory)/**/coverage.cobertura.xml'
 
 - stage: DockerBuildAndPush
   displayName: Docker Build and Push
